@@ -6,25 +6,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.xwray.groupie.Item
 
-open class ComposeViewHolder(protected val composeView: ComposeView) :
-  com.xwray.groupie.GroupieViewHolder(composeView) {
-  init {
-    composeView.setViewCompositionStrategy(
-      ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
-    )
-  }
-
-  fun bind(content: @Composable () -> Unit) {
-    composeView.setContent {
-      content()
-    }
-  }
-
-  fun disposeComposition() {
-    composeView.disposeComposition()
-  }
-}
-
 abstract class ComposeItem : Item<ComposeViewHolder> {
   constructor(id: Long) : super(id)
   constructor() : super()
@@ -46,4 +27,23 @@ abstract class ComposeItem : Item<ComposeViewHolder> {
   abstract fun Content(position: Int)
 
   override fun getLayout() = R.layout.item_compose
+}
+
+open class ComposeViewHolder(protected val composeView: ComposeView) :
+  com.xwray.groupie.GroupieViewHolder(composeView) {
+  init {
+    composeView.setViewCompositionStrategy(
+      ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+    )
+  }
+
+  fun bind(content: @Composable () -> Unit) {
+    composeView.setContent {
+      content()
+    }
+  }
+
+  fun disposeComposition() {
+    composeView.disposeComposition()
+  }
 }

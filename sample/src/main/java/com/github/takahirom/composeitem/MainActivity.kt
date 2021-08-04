@@ -14,6 +14,7 @@ import com.xwray.groupie.viewbinding.BindableItem
 import com.github.takahirom.composeitem.databinding.ActivityMainBinding
 import com.github.takahirom.composeitem.databinding.ItemHeaderBinding
 import com.github.takahirom.composeitem.ui.theme.ComposeingroupieTheme
+import com.xwray.groupie.Group
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -34,9 +35,11 @@ class MainActivity : ComponentActivity() {
       repeatOnLifecycle(Lifecycle.State.STARTED) {
         uiStateFlow
           .collect {
-            val items = listOf(
+            val items = mutableListOf<Group>()
+            items += listOf(
               HeaderItem("This is BindableItem"),
-            ) + it.map { TextComposeItem(it) }
+            )
+            items += it.map { TextComposeItem(it) }
             groupAdapter.update(items)
           }
       }
@@ -59,8 +62,13 @@ class HeaderItem(private val text: String) : BindableItem<ItemHeaderBinding>() {
 class TextComposeItem(val text: String) : ComposeItem() {
   @Composable
   override fun Content(position: Int) {
-    Text(text = text)
+    Item(text)
   }
+}
+
+@Composable
+fun Item(text: String) {
+  Text(text = text)
 }
 
 @Preview(showBackground = true)

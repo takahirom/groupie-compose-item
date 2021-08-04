@@ -1,6 +1,8 @@
-# Code
+# groupie-compose-item
 
 You can treat Compose as a regular Groupie item!
+
+This library is very simple and small. You can check source the [code](https://github.com/takahirom/groupie-compose-item/blob/main/composeitem/src/main/java/com/github/takahirom/composeitem/ComposeItem.kt).
 
 ```kotlin
 class TextComposeItem(val text: String) : ComposeItem() {

@@ -16,7 +16,7 @@ class TextComposeItem(val text: String) : ComposeItem() {
 @Composable
 fun Preview() {
   ComposeinGroupieTheme {
-    TextComposeItem(text = "Hello!!!!!").Content(0)
+    TextComposeItem(text = "Hello Compose!").Content(0)
   }
 }
 ```

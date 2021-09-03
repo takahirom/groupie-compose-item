@@ -48,7 +48,7 @@ android {
 }
 
 dependencies {
-  def groupieVersion = "2.9.0"
+  def groupieVersion = "2.5.1"
   api "com.github.lisawray.groupie:groupie:$groupieVersion"
   api "androidx.recyclerview:recyclerview:1.1.0"
   api "androidx.compose.ui:ui:$compose_version"

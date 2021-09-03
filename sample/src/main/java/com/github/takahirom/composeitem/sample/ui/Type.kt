@@ -1,4 +1,4 @@
-package com.github.takahirom.composeitem.ui.theme
+package com.github.takahirom.composeitem.ui.sample.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

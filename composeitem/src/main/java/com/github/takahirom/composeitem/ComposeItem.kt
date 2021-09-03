@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
 
 abstract class ComposeItem : Item<ComposeViewHolder> {
   constructor(id: Long) : super(id)
@@ -30,7 +31,7 @@ abstract class ComposeItem : Item<ComposeViewHolder> {
 }
 
 open class ComposeViewHolder(protected val composeView: ComposeView) :
-  com.xwray.groupie.GroupieViewHolder(composeView) {
+  ViewHolder(composeView) {
   init {
     composeView.setViewCompositionStrategy(
       ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed

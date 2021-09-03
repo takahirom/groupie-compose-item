@@ -1,7 +1,6 @@
-package com.github.takahirom.composeitem
+package com.github.takahirom.composeitem.sample
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -9,13 +8,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.github.takahirom.composeitem.sample.R
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.viewbinding.BindableItem
+import com.github.takahirom.composeitem.ComposeItem
 import com.github.takahirom.composeitem.sample.databinding.ActivityMainBinding
-import com.github.takahirom.composeitem.sample.databinding.ItemHeaderBinding
-import com.github.takahirom.composeitem.ui.theme.ComposeingroupieTheme
+import com.github.takahirom.composeitem.ui.sample.theme.ComposeingroupieTheme
 import com.xwray.groupie.Group
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -26,7 +24,7 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val groupAdapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
+    val groupAdapter = GroupAdapter<ViewHolder>()
     val binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
@@ -37,26 +35,11 @@ class MainActivity : ComponentActivity() {
         uiStateFlow
           .collect {
             val items = mutableListOf<Group>()
-            items += listOf(
-              HeaderItem("This is BindableItem"),
-            )
             items += it.map { TextComposeItem(it) }
             groupAdapter.update(items)
           }
       }
     }
-  }
-}
-
-class HeaderItem(private val text: String) : BindableItem<ItemHeaderBinding>() {
-  override fun getLayout() = R.layout.item_header
-
-  override fun bind(viewBinding: ItemHeaderBinding, position: Int) {
-    viewBinding.textView.text = text
-  }
-
-  override fun initializeViewBinding(view: View): ItemHeaderBinding {
-    return ItemHeaderBinding.bind(view)
   }
 }
 

@@ -9,10 +9,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.github.takahirom.composeitem.sample.R
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.viewbinding.BindableItem
-import com.github.takahirom.composeitem.databinding.ActivityMainBinding
-import com.github.takahirom.composeitem.databinding.ItemHeaderBinding
+import com.github.takahirom.composeitem.sample.databinding.ActivityMainBinding
+import com.github.takahirom.composeitem.sample.databinding.ItemHeaderBinding
 import com.github.takahirom.composeitem.ui.theme.ComposeingroupieTheme
 import com.xwray.groupie.Group
 import kotlinx.coroutines.flow.MutableStateFlow

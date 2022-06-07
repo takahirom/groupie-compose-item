@@ -6,44 +6,43 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.xwray.groupie.Item
 
-abstract class ComposeItem : Item<ComposeViewHolder> {
+abstract class ComposeItem<T : ComposeItem.ComposeBinding> : Item<ComposeViewHolder<T>> {
   constructor(id: Long) : super(id)
   constructor() : super()
 
-  override fun createViewHolder(itemView: View): ComposeViewHolder {
-    return ComposeViewHolder(itemView as ComposeView)
+  interface ComposeBinding {
+    @Composable
+    fun Content()
   }
 
-  override fun unbind(viewHolder: ComposeViewHolder) {
-    super.unbind(viewHolder)
-    viewHolder.disposeComposition()
+  override fun createViewHolder(itemView: View): ComposeViewHolder<T> {
+
+    val composeView = itemView as ComposeView
+    composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool)
+    val composeBinding = composeBinding()
+    composeView.setContent { composeBinding.Content() }
+    return ComposeViewHolder(composeView, composeBinding)
   }
 
-  override fun bind(viewHolder: ComposeViewHolder, position: Int) {
-    viewHolder.bind { Content(position) }
+  abstract fun composeBinding(): T
+
+  override fun bind(viewHolder: ComposeViewHolder<T>, position: Int) {
+    bind(viewHolder.composeBinding, position)
   }
 
-  @Composable
-  abstract fun Content(position: Int)
+  abstract fun bind(composeBinding: T, position: Int)
 
   override fun getLayout() = R.layout.item_compose
 }
 
-open class ComposeViewHolder(protected val composeView: ComposeView) :
+open class ComposeViewHolder<T : ComposeItem.ComposeBinding>(
+  composeView: ComposeView,
+  val composeBinding: T
+) :
   com.xwray.groupie.GroupieViewHolder(composeView) {
   init {
     composeView.setViewCompositionStrategy(
       ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
     )
-  }
-
-  fun bind(content: @Composable () -> Unit) {
-    composeView.setContent {
-      content()
-    }
-  }
-
-  fun disposeComposition() {
-    composeView.disposeComposition()
   }
 }

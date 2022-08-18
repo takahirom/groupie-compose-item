@@ -2,11 +2,8 @@
 
 You can treat Compose as a regular Groupie item!
 
-This library is very simple and small. You can check
-the [source code](https://github.com/takahirom/groupie-compose-item/blob/main/composeitem/src/main/java/com/github/takahirom/composeitem/ComposeItem.kt)
-based
-on [Integrating Compose with your existing UI](https://developer.android.com/jetpack/compose/interop/compose-in-existing-ui#compose-recyclerview)
-.
+This library is very simple and small. You can check the [source code](https://github.com/takahirom/groupie-compose-item/blob/main/composeitem/src/main/java/com/github/takahirom/composeitem/ComposeItem.kt) based
+on [Integrating Compose with your existing UI](https://developer.android.com/jetpack/compose/interop/compose-in-existing-ui#compose-recyclerview).
 
 ```kotlin
 class TextComposeItem(val text: String) :

@@ -52,7 +52,7 @@ dependencies {
   implementation project(":composeitem")
   // implementation 'com.github.takahirom.groupie-compose-item:composeitem:0.1.0'
 
-  def groupieVersion = "2.9.0"
+  def groupieVersion = "2.8.1"
   implementation "com.github.lisawray.groupie:groupie:$groupieVersion"
   implementation "com.github.lisawray.groupie:groupie-viewbinding:$groupieVersion"
 

@@ -25,6 +25,10 @@ class TextComposeItem(val text: String) :
       Item(text)
     }
   }
+  
+  override fun composeBindingClass(): KClass<Binding> {
+    return Binding::class
+  }
 }
 
 @Preview(showBackground = true)

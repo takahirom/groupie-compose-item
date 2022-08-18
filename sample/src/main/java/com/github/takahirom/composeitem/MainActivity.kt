@@ -99,6 +99,7 @@ class TextComposeItem(val text: String) :
     }
   }
 
+  // optional
   override fun composeBinding(): Binding {
     return Binding()
   }
@@ -134,10 +135,6 @@ class TextComposeItem2(val text: String) :
       }
       Item(text)
     }
-  }
-
-  override fun composeBinding(): Binding {
-    return Binding()
   }
 
   override fun bind(composeBinding: Binding, position: Int) {

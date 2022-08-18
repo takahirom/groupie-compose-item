@@ -42,7 +42,7 @@ fun DefaultPreview() {
 # How to use
 
 ```kotlin
-    allprojects {
+allprojects {
   repositories {
     ...
     maven { url 'https://jitpack.io' }
@@ -51,7 +51,7 @@ fun DefaultPreview() {
 ```
 
 ```kotlin
-    dependencies {
+dependencies {
   implementation 'com.github.takahirom.groupie-compose-item:composeitem:0.1.0'
 }
 ```

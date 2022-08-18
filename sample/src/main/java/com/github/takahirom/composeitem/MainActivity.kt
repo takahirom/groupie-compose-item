@@ -27,6 +27,7 @@ import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 val uiStateFlow = MutableStateFlow<List<String>>(listOf("1"))
 
@@ -58,6 +59,7 @@ class MainActivity : ComponentActivity() {
               HeaderItem("This is BindableItem"),
             )
             items += it.map { TextComposeItem(it) }
+            items += it.map { TextComposeItem2(it) }
             groupAdapter.update(items)
           }
       }
@@ -107,6 +109,47 @@ class TextComposeItem(val text: String) :
 
   override fun hasSameContentAs(other: Item<*>): Boolean {
     return (other as? TextComposeItem)?.text == text
+  }
+
+  override fun composeBindingClass(): KClass<Binding> {
+    return Binding::class
+  }
+}
+
+class TextComposeItem2(val text: String) :
+  ComposeItem<TextComposeItem2.Binding>(text.hashCode().toLong()) {
+  class Binding : ComposeBinding {
+    var text by mutableStateOf("")
+
+    @Composable
+    override fun Content() {
+      val firstText = remember { text }
+      LaunchedEffect(key1 = text) {
+        println("createTimeText:$firstText current:$text")
+      }
+      DisposableEffect(key1 = Unit) {
+        onDispose {
+          println("dispose:$text")
+        }
+      }
+      Item(text)
+    }
+  }
+
+  override fun composeBinding(): Binding {
+    return Binding()
+  }
+
+  override fun bind(composeBinding: Binding, position: Int) {
+    composeBinding.text = text
+  }
+
+  override fun hasSameContentAs(other: Item<*>): Boolean {
+    return (other as? TextComposeItem)?.text == text
+  }
+
+  override fun composeBindingClass(): KClass<Binding> {
+    return Binding::class
   }
 }
 

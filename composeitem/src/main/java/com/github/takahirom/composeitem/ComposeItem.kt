@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.xwray.groupie.Item
+import kotlin.reflect.KClass
 
 abstract class ComposeItem<T : ComposeItem.ComposeBinding> : Item<ComposeViewHolder<T>> {
   constructor(id: Long) : super(id)
@@ -24,13 +25,21 @@ abstract class ComposeItem<T : ComposeItem.ComposeBinding> : Item<ComposeViewHol
     return ComposeViewHolder(composeView, composeBinding)
   }
 
-  abstract fun composeBinding(): T
+  open fun composeBinding(): T {
+    return composeBindingClass().java.newInstance()
+  }
+
+  abstract fun composeBindingClass(): KClass<T>
 
   override fun bind(viewHolder: ComposeViewHolder<T>, position: Int) {
     bind(viewHolder.composeBinding, position)
   }
 
   abstract fun bind(composeBinding: T, position: Int)
+
+  override fun getViewType(): Int {
+    return composeBindingClass().hashCode()
+  }
 
   override fun getLayout() = R.layout.item_compose
 }

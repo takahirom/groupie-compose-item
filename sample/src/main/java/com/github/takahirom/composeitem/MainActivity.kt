@@ -67,8 +67,6 @@ class MainActivity : ComponentActivity() {
             )
             val items1 = listOf("1").map { TextComposeItem(it, Random.nextBoolean()) }
             items += items1
-            val recyclerView: RecyclerView = binding.recyclerView
-            recyclerView.getRecycledViewPool().setMaxRecycledViews(items1[0].viewType, 0)
 //            items += listOf("1", "2","3").map { TextComposeItem2(it) }
             groupAdapter.update(items)
           }

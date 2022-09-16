@@ -3,6 +3,9 @@ package com.github.takahirom.composeitem
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,10 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import com.github.takahirom.composeitem.sample.R
 import com.github.takahirom.composeitem.sample.databinding.ActivityMainBinding
 import com.github.takahirom.composeitem.sample.databinding.ItemHeaderBinding
@@ -27,9 +33,10 @@ import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 import kotlin.reflect.KClass
 
-val uiStateFlow = MutableStateFlow<List<String>>(listOf("1"))
+val uiStateFlow = MutableStateFlow<List<String>>(listOf("1", "2", "3"))
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +65,11 @@ class MainActivity : ComponentActivity() {
             items += listOf(
               HeaderItem("This is BindableItem"),
             )
-            items += it.map { TextComposeItem(it) }
-            items += it.map { TextComposeItem2(it) }
+            val items1 = listOf("1").map { TextComposeItem(it, Random.nextBoolean()) }
+            items += items1
+            val recyclerView: RecyclerView = binding.recyclerView
+            recyclerView.getRecycledViewPool().setMaxRecycledViews(items1[0].viewType, 0)
+//            items += listOf("1", "2","3").map { TextComposeItem2(it) }
             groupAdapter.update(items)
           }
       }
@@ -79,13 +89,20 @@ class HeaderItem(private val text: String) : BindableItem<ItemHeaderBinding>() {
   }
 }
 
-class TextComposeItem(val text: String) :
-  ComposeItem<TextComposeItem.Binding>(text.hashCode().toLong()) {
+class TextComposeItem(val text: String, val rotate: Boolean) :
+  ComposeItem<TextComposeItem.Binding>(Binding::class.hashCode().toLong()) {
   class Binding : ComposeBinding {
     var text by mutableStateOf("")
+    var rotate by mutableStateOf(false)
 
     @Composable
     override fun Content() {
+      val angle by animateFloatAsState(
+        targetValue = if (rotate) 180F else 0F,
+        animationSpec = tween(
+          durationMillis = 500
+        )
+      )
       val firstText = remember { text }
       LaunchedEffect(key1 = text) {
         println("createTimeText:$firstText current:$text")
@@ -95,7 +112,14 @@ class TextComposeItem(val text: String) :
           println("dispose:$text")
         }
       }
-      Item(text)
+      println("recompose $rotate")
+      Text(
+        text = text,
+        style = MaterialTheme.typography.h1,
+        modifier = Modifier.rotate(angle).clickable {
+          rotate = !rotate
+        }
+      )
     }
   }
 
@@ -106,10 +130,16 @@ class TextComposeItem(val text: String) :
 
   override fun bind(composeBinding: Binding, position: Int) {
     composeBinding.text = text
+    composeBinding.rotate = rotate
+    println("bind recompose $rotate $composeBinding")
+  }
+
+  override fun isSameAs(other: Item<*>): Boolean {
+    return (other as? TextComposeItem)?.text == text
   }
 
   override fun hasSameContentAs(other: Item<*>): Boolean {
-    return (other as? TextComposeItem)?.text == text
+    return (other as? TextComposeItem)?.text == text && (other as? TextComposeItem)?.rotate == rotate
   }
 
   override fun composeBindingClass(): KClass<Binding> {
@@ -152,14 +182,17 @@ class TextComposeItem2(val text: String) :
 
 @Composable
 fun Item(text: String) {
-  Text(text = text, style = MaterialTheme.typography.h1)
+  Text(
+    text = text,
+    style = MaterialTheme.typography.h1,
+  )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
   ComposeingroupieTheme {
-    val textComposeItem = TextComposeItem(text = "Hello!!!!!")
+    val textComposeItem = TextComposeItem(text = "Hello!!!!!", false)
     val composeBinding = textComposeItem.composeBinding()
     textComposeItem.bind(composeBinding, 0)
     composeBinding.Content()

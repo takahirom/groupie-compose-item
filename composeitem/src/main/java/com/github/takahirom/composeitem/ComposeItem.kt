@@ -47,11 +47,4 @@ abstract class ComposeItem<T : ComposeItem.ComposeBinding> : Item<ComposeViewHol
 open class ComposeViewHolder<T : ComposeItem.ComposeBinding>(
   composeView: ComposeView,
   val composeBinding: T
-) :
-  com.xwray.groupie.GroupieViewHolder(composeView) {
-  init {
-    composeView.setViewCompositionStrategy(
-      ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
-    )
-  }
-}
+) : com.xwray.groupie.GroupieViewHolder(composeView)
